@@ -6,8 +6,11 @@ var searchHistory = [];
 var searchInput = document.querySelector("#searchCity");
 var searchInit = document.querySelector("#submitSearch");
 
-$(searchInit).click(searchCity);
+// Add timezone plugins to day.js
+dayjs.extend(window.dayjs_plugin_utc);
+dayjs.extend(window.dayjs_plugin_timezone);
 
+$(searchInit).click(searchCity);
 
 //Search on Button Submit
 function searchCity(event) {
@@ -23,27 +26,56 @@ function searchCity(event) {
 
 function fetchCoords (search) {
     var apiUrl = `${weatherApiUrl}/geo/1.0/direct?q=${search}&appid=${weatherApiKey}`;
-    console.log(apiUrl);
     fetch(apiUrl)
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
-      console.log(data[0]);
-      var cityData = data[0];
-      var lat = cityData.lat;
-      var lon = cityData.lon;
-      console.log(cityData);
-      console.log("Lat: " + lat + ", Lon: " + lon);
-
       if (!data[0]) {
         alert('Location not found');
       } else {
-        appendToHistory(search);
-        fetchWeather(data[0]);
+        console.log(data[0]);
+        var cityData = data[0];
+        var cityName = cityData.name;
+        var lat = cityData.lat;
+        var lon = cityData.lon;
+        console.log(cityData);
+        console.log("Lat: " + lat + ", Lon: " + lon);
+        // appendToHistory(search);
+        fetchWeather(cityName, lat, lon);
       }
     })
     .catch(function (err) {
       console.error(err);
     });
+}
+
+function fetchWeather (cityName, lat, lon) {
+    var weatherUrl = `${weatherApiUrl}/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely,hourly&appid=${weatherApiKey}`;
+    console.log(weatherUrl);
+    fetch(weatherUrl)
+    .then(function(response){
+        return response.json();
+    })
+    .then(function(data){
+        renderItems(cityName, data);
+    })
+    .catch(function (err){
+        console.error(err);
+    });
+}
+
+function renderItems(cityName, data) {
+    console.log(cityName);
+    console.log(data.current);
+    console.log(data.timezone);
+    renderCurrentWeather(cityName, data.current, data.timezone);
+    // renderForecast(data.daily, data.timezone);
+}
+
+function renderCurrentWeather(cityName, weather, timezone) {
+    var date = dayjs().tz(timezone).format('MM/DD/YYYY');
+    console.log(date);
+    console.log(cityName);
+    console.log(weather);
 }
