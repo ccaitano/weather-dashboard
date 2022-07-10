@@ -96,16 +96,28 @@ function renderCurrentWeather(cityName, weather, timezone) {
     var windEl = document.createElement('p');
     var humidityEl = document.createElement('p');
     var uvIndexEl = document.createElement('p');
+    var uvBadge = document.createElement('button');
 
     weatherIcon.setAttribute('src', iconUrl);
     weatherIcon.setAttribute('alt', iconDescription);
     weatherIcon.setAttribute('class', 'weather-img');
+    uvBadge.classList.add('btn', 'btn-sm');
+
+    if (uvIndex < 3) {
+      uvBadge.classList.add('btn-success');
+    } else if (uvIndex < 7) {
+      uvBadge.classList.add('btn-warning');
+    } else {
+      uvBadge.classList.add('btn-danger');
+    }
     
     cityNameEl.textContent = `Current Weather for ${cityName} (${date})`;
     tempEl.textContent = `Temperature: ${temp}°F`;
     windEl.textContent = `Wind: ${wind} MPH`;
     humidityEl.textContent = `Humidity: ${humidity}%`;
-    uvIndexEl.textContent = `UV Index: ${uvIndex}`;
+    uvIndexEl.textContent = `UV Index: `;
+    uvBadge.textContent = uvIndex;
+    uvIndexEl.append(uvBadge);
 
     currentWeather.innerHTML = "";
     currentWeather.append(cityNameEl, weatherIcon, tempEl, windEl, humidityEl, uvIndexEl);
