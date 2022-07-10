@@ -74,7 +74,7 @@ function renderItems(cityName, data) {
     console.log(data.current);
     console.log(data.timezone);
     renderCurrentWeather(cityName, data.current, data.timezone);
-    // renderForecast(data.daily, data.timezone);
+    renderForecast(data.daily, data.timezone);
 }
 
 function renderCurrentWeather(cityName, weather, timezone) {
@@ -142,4 +142,16 @@ function renderSearchHistory() {
     buttonItem.textContent = searchHistory[i];
     searchHistoryEl.append(buttonItem);
   }
+}
+
+function getSearchHistory() {
+  var storedHistory = localStorage.getItem('search-history');
+  if (storedHistory) {
+    searchHistory = JSON.parse(storedHistory);
+  }
+  renderSearchHistory();
+}
+
+function renderForecast(forecast, timezone) {
+
 }
