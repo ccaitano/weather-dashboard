@@ -16,21 +16,23 @@
     </header>
     <div class="container-fluid">
       <div class="row">
-        <div class="card col-3 ml-4">
+        <aside class="card col-3 mb-3 ml-4">
           <div class="card-body">
             <h5 class="card-title">Search for a City:</h5>
             <input type="text" class="form-control" id="searchCity" placeholder="Enter City" style="margin-bottom:10px">
             <button type="submit" href="#" class="btn btn-primary btn-block" id="submitSearch">Search</button>
             <hr>
             <h5 class="card-title">Recent Searches</h5>
-            <div class="card-body" id="history">
-            </div>
+            <div id="history"></div>
           </div>
+        </aside>
+        <div class="col-8 mb-3 text-center">
+          <section id="current-weather"></section>
+          <section class="row" id="forecast-weather"></section>
         </div>
-        <div class="col-8 text-center" id="current-weather">
-        </div>
-        <div class="col-8 text-center" id="forecast-weather">
-        </div>
+        
+
+        
       </div>
     </div>
 
