@@ -7,6 +7,7 @@ var searchInput = document.querySelector("#searchCity");
 var searchInit = document.querySelector("#submitSearch");
 var currentWeather = document.querySelector('#current-weather');
 var searchHistoryEl = document.querySelector('#history');
+var forecastWeatherEl = document.querySelector('#forecast-weather');
 
 // Add timezone plugins to day.js
 dayjs.extend(window.dayjs_plugin_utc);
@@ -153,5 +154,39 @@ function getSearchHistory() {
 }
 
 function renderForecast(forecast, timezone) {
+  var startDate = dayjs().tz(timezone).add(1, 'day').startOf('day').unix();
+  var endDate = dayjs().tz(timezone).add(6, 'day').startOf('day').unix();
+
+  var forecastHeaderEl = document.createElement('h3');
+  forecastWeatherEl.innerHTML='';
+  forecastHeaderEl.textContent = '5-Day Forecast';
+  forecastWeatherEl.append(forecastHeaderEl);
+
+  for (var i = 0; i < forecast.length; i++) {
+    if (forecast[i].dt >= startDate && forecast[i].dt < endDate) {
+      renderForecastCard(forecast[i], timezone);
+    }
+  }
+}
+
+function renderForecastCard(forecast, timezone) {
+  var date = forecast.dt;
+  
+  var col = document.createElement('div');
+  var card = document.createElement('div');
+  var cardBody = document.createElement('div');
+  var cardTitle = document.createElement('h5');
+
+  col.append(card);
+  card.append(cardBody);
+
+  col.setAttribute('class', 'col-md');
+  col.classList.add('five-day-card');
+  card.setAttribute('class', 'card bg-primary h-100 text-white');
+  cardBody.setAttribute('class', 'card-body p-2');
+
+  cardTitle.textContent = dayjs.unix(date).tz(timezone).format('MM/DD/YYYY');
+
+  forecastWeatherEl.append(col);
 
 }
