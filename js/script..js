@@ -6,6 +6,7 @@ var searchHistory = [];
 var searchInput = document.querySelector("#searchCity");
 var searchInit = document.querySelector("#submitSearch");
 var currentWeather = document.querySelector('#current-weather');
+var searchHistoryEl = document.querySelector('#history');
 
 // Add timezone plugins to day.js
 dayjs.extend(window.dayjs_plugin_utc);
@@ -43,7 +44,7 @@ function fetchCoords (search) {
         var lon = cityData.lon;
         console.log(cityData);
         console.log("Lat: " + lat + ", Lon: " + lon);
-        // appendToHistory(search);
+        saveHistory(search);
         fetchWeather(cityName, lat, lon);
       }
     })
@@ -121,4 +122,23 @@ function renderCurrentWeather(cityName, weather, timezone) {
 
     currentWeather.innerHTML = "";
     currentWeather.append(cityNameEl, weatherIcon, tempEl, windEl, humidityEl, uvIndexEl);
+}
+
+function saveHistory (search) {
+  if (searchHistory.indexOf(search) !== -1) {
+    return;
+  }
+  searchHistory.push(search);
+  localStorage.setItem('search-history', JSON.stringify(searchHistory));
+  renderSearchHistory();
+}
+
+function renderSearchHistory() {
+  searchHistoryEl.innerHTML = '';
+  for (var i = searchHistory.length -1; i>= 0; i--) {
+    var listItem = document.createElement('p');
+
+    listItem.textContent = searchHistory[i];
+    searchHistoryEl.append(listItem);
+  }
 }
