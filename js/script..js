@@ -86,17 +86,27 @@ function renderCurrentWeather(cityName, weather, timezone) {
     var temp = weather.temp;
     var iconUrl = `https://openweathermap.org/img/w/${weather.weather[0].icon}.png`;
     var iconDescription = weather.weather[0].description || weather[0].main;
+    var wind = weather.wind_speed;
+    var humidity = weather.humidity;
+    var uvIndex = weather.uvi;
 
     var cityNameEl = document.createElement('h3');
     var tempEl = document.createElement('p');
     var weatherIcon = document.createElement('img');
+    var windEl = document.createElement('p');
+    var humidityEl = document.createElement('p');
+    var uvIndexEl = document.createElement('p');
+
     weatherIcon.setAttribute('src', iconUrl);
     weatherIcon.setAttribute('alt', iconDescription);
     weatherIcon.setAttribute('class', 'weather-img');
     
     cityNameEl.textContent = `Current Weather for ${cityName} (${date})`;
     tempEl.textContent = `Temperature: ${temp}°F`;
+    windEl.textContent = `Wind: ${wind} MPH`;
+    humidityEl.textContent = `Humidity: ${humidity}%`;
+    uvIndexEl.textContent = `UV Index: ${uvIndex}`;
 
     currentWeather.innerHTML = "";
-    currentWeather.append(cityNameEl, weatherIcon, tempEl);
+    currentWeather.append(cityNameEl, weatherIcon, tempEl, windEl, humidityEl, uvIndexEl);
 }
