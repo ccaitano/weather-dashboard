@@ -136,9 +136,10 @@ function saveHistory (search) {
 function renderSearchHistory() {
   searchHistoryEl.innerHTML = '';
   for (var i = searchHistory.length -1; i>= 0; i--) {
-    var listItem = document.createElement('p');
-
-    listItem.textContent = searchHistory[i];
-    searchHistoryEl.append(listItem);
+    var buttonItem = document.createElement('button');
+    buttonItem.setAttribute('type','button');
+    buttonItem.setAttribute('class', 'btn btn-outline-info btn-block');
+    buttonItem.textContent = searchHistory[i];
+    searchHistoryEl.append(buttonItem);
   }
 }
