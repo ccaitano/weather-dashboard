@@ -24,6 +24,7 @@ function searchCity(event) {
   searchInput.value = '';
 }
 
+//Get Latitude and Longitude Coordinates
 function fetchCoords (search) {
     var apiUrl = `${weatherApiUrl}/geo/1.0/direct?q=${search}&appid=${weatherApiKey}`;
     fetch(apiUrl)
@@ -50,6 +51,7 @@ function fetchCoords (search) {
     });
 }
 
+//Get weather for coordinates
 function fetchWeather (cityName, lat, lon) {
     var weatherUrl = `${weatherApiUrl}/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely,hourly&appid=${weatherApiKey}`;
     console.log(weatherUrl);
@@ -78,4 +80,7 @@ function renderCurrentWeather(cityName, weather, timezone) {
     console.log(date);
     console.log(cityName);
     console.log(weather);
+    
+    // Store response data from our fetch request in variables
+   
 }
