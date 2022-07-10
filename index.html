@@ -14,23 +14,23 @@
     <header class="jumbotron bg-primary text-white text-center">
         <h1 class="font-weight-bolder">Weather Dashboard</h1>
     </header>
-    <aside>
-      <div class="card" style="width:25%; margin:10px">
-        <div class="card-body">
-          <h5 class="card-title">Search for a City:</h5>
-          <input type="text" class="form-control" id="searchCity" placeholder="Enter City" style="margin-bottom:10px">
-          <button type="submit" href="#" class="btn btn-primary" id="submitSearch">Search</button>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="card col-3 ml-4">
+          <div class="card-body">
+            <h5 class="card-title">Search for a City:</h5>
+            <input type="text" class="form-control" id="searchCity" placeholder="Enter City" style="margin-bottom:10px">
+            <button type="submit" href="#" class="btn btn-primary" id="submitSearch">Search</button>
+            <hr>
+            <h5 class="card-title">Recent Searches</h5>
+          </div>
+        </div>
+        <div class="col-8" id="current-weather">
+          <h5>Current Weather</h5>
         </div>
       </div>
-      <div class="card" style="width:25%; margin:10px">
-        <div class="card-body">
-          <h5 class="card-title">Recent Searches</h5>
-        </div>
-      </div>
-    </aside>
-    <div class="container current-weather">
-
     </div>
+
 
     <!-- JQuery/Bootstrap JavaScript -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

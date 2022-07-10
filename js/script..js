@@ -5,6 +5,7 @@ var weatherApiKey = 'ec3ce11c57dd96988278b8f33d0f356b';
 var searchHistory = [];
 var searchInput = document.querySelector("#searchCity");
 var searchInit = document.querySelector("#submitSearch");
+var currentWeather = document.querySelector('#current-weather');
 
 // Add timezone plugins to day.js
 dayjs.extend(window.dayjs_plugin_utc);
@@ -82,5 +83,13 @@ function renderCurrentWeather(cityName, weather, timezone) {
     console.log(weather);
     
     // Store response data from our fetch request in variables
-   
+    var temp = weather.temp;
+
+    var tempEl = document.createElement('p');
+
+    tempEl.setAttribute('class', 'h3');
+
+    tempEl.textContent = `Temperature: ${temp}°F`;
+
+    currentWeather.append(tempEl);
 }
