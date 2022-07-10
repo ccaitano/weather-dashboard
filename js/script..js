@@ -13,8 +13,6 @@ var forecastWeatherEl = document.querySelector('#forecast-weather');
 dayjs.extend(window.dayjs_plugin_utc);
 dayjs.extend(window.dayjs_plugin_timezone);
 
-$(searchInit).click(searchCity);
-
 //Search on Button Submit
 function searchCity(event) {
   if (!searchInput.value) {
@@ -43,10 +41,9 @@ function fetchCoords (search) {
         var cityName = cityData.name;
         var lat = cityData.lat;
         var lon = cityData.lon;
-        console.log(cityData);
-        console.log("Lat: " + lat + ", Lon: " + lon);
+        var cityCountry = cityData.country;
         saveHistory(search);
-        fetchWeather(cityName, lat, lon);
+        fetchWeather(cityName, cityCountry, lat, lon);
       }
     })
     .catch(function (err) {
@@ -55,35 +52,27 @@ function fetchCoords (search) {
 }
 
 //Get weather for coordinates
-function fetchWeather (cityName, lat, lon) {
+function fetchWeather (cityName, cityCountry, lat, lon) {
     var weatherUrl = `${weatherApiUrl}/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely,hourly&appid=${weatherApiKey}`;
-    console.log(weatherUrl);
     fetch(weatherUrl)
     .then(function(response){
         return response.json();
     })
     .then(function(data){
-        renderItems(cityName, data);
+        renderItems(cityName, cityCountry, data);
     })
     .catch(function (err){
         console.error(err);
     });
 }
 
-function renderItems(cityName, data) {
-    console.log(cityName);
-    console.log(data.current);
-    console.log(data.timezone);
-    renderCurrentWeather(cityName, data.current, data.timezone);
+function renderItems(cityName, cityCountry, data) {
+    renderCurrentWeather(cityName, cityCountry, data.current, data.timezone);
     renderForecast(data.daily, data.timezone);
 }
 
-function renderCurrentWeather(cityName, weather, timezone) {
+function renderCurrentWeather(cityName, cityCountry, weather, timezone) {
     var date = dayjs().tz(timezone).format('MM/DD/YYYY');
-    console.log(date);
-    console.log(cityName);
-    console.log(weather);
-    
     // Store response data from our fetch request in variables
     var temp = weather.temp;
     var iconUrl = `https://openweathermap.org/img/w/${weather.weather[0].icon}.png`;
@@ -113,7 +102,7 @@ function renderCurrentWeather(cityName, weather, timezone) {
       uvBadge.classList.add('btn-danger');
     }
     
-    cityNameEl.textContent = `Current Weather for ${cityName} (${date})`;
+    cityNameEl.textContent = `Current Weather for ${cityName}, ${cityCountry} (${date})`;
     tempEl.textContent = `Temperature: ${temp}°F`;
     windEl.textContent = `Wind: ${wind} MPH`;
     humidityEl.textContent = `Humidity: ${humidity}%`;
@@ -139,7 +128,10 @@ function renderSearchHistory() {
   for (var i = searchHistory.length -1; i>= 0; i--) {
     var buttonItem = document.createElement('button');
     buttonItem.setAttribute('type','button');
-    buttonItem.setAttribute('class', 'btn btn-outline-info btn-block');
+    // buttonItem.setAttribute('aria-controls', 'today-forecast');
+    // buttonItem.classList.add('history-btn', 'btn-history');
+    buttonItem.setAttribute('class', 'btn btn-outline-info btn-block btn-history');
+    buttonItem.setAttribute('data-search', searchHistory[i]);
     buttonItem.textContent = searchHistory[i];
     searchHistoryEl.append(buttonItem);
   }
@@ -210,3 +202,16 @@ function renderForecastCard(forecast, timezone) {
   forecastWeatherEl.append(col);
 
 }
+
+function searchPrevious(event) {
+  if (!event.target.matches('.btn-history')) {
+    return;
+  }
+  var btn = event.target;
+  var search = btn.getAttribute('data-search');
+  fetchCoords(search);
+}
+
+getSearchHistory();
+searchInit.addEventListener('click', searchCity);
+searchHistoryEl.addEventListener('click', searchPrevious);
