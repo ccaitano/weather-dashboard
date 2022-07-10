@@ -84,12 +84,19 @@ function renderCurrentWeather(cityName, weather, timezone) {
     
     // Store response data from our fetch request in variables
     var temp = weather.temp;
+    var iconUrl = `https://openweathermap.org/img/w/${weather.weather[0].icon}.png`;
+    var iconDescription = weather.weather[0].description || weather[0].main;
 
+    var cityNameEl = document.createElement('h3');
     var tempEl = document.createElement('p');
-
-    tempEl.setAttribute('class', 'h3');
-
+    var weatherIcon = document.createElement('img');
+    weatherIcon.setAttribute('src', iconUrl);
+    weatherIcon.setAttribute('alt', iconDescription);
+    weatherIcon.setAttribute('class', 'weather-img');
+    
+    cityNameEl.textContent = `Current Weather for ${cityName} (${date})`;
     tempEl.textContent = `Temperature: ${temp}°F`;
 
-    currentWeather.append(tempEl);
+    currentWeather.innerHTML = "";
+    currentWeather.append(cityNameEl, weatherIcon, tempEl);
 }
