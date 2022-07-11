@@ -5,6 +5,7 @@ var weatherApiKey = 'ec3ce11c57dd96988278b8f33d0f356b';
 var searchHistory = [];
 var searchInput = document.querySelector("#searchCity");
 var searchInit = document.querySelector("#submitSearch");
+var clearSearch = document.querySelector("#clearSearch");
 var currentWeather = document.querySelector('#current-weather');
 var searchHistoryEl = document.querySelector('#history');
 var forecastWeatherEl = document.querySelector('#forecast-weather');
@@ -212,6 +213,17 @@ function searchPrevious(event) {
   fetchCoords(search);
 }
 
+function clearSearchHistory(event) {
+  event.preventDefault();
+  var storedHistory = localStorage.getItem('search-history');
+  storedHistory = [];
+  localStorage.setItem('search-history', JSON.stringify(storedHistory));
+  searchHistoryEl.innerHTML="";
+  currentWeather.innerHTML="";
+  forecastWeatherEl.innerHTML="";
+  return;
+}
 getSearchHistory();
 searchInit.addEventListener('click', searchCity);
 searchHistoryEl.addEventListener('click', searchPrevious);
+clearSearch.addEventListener('click', clearSearchHistory);
