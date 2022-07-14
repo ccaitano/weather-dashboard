@@ -2,7 +2,7 @@
 var weatherApiUrl = 'http://api.openweathermap.org';
 var weatherApiKey = 'ec3ce11c57dd96988278b8f33d0f356b';
 
-var searchHistory = [];
+var storedHistory = [];
 var searchInput = document.querySelector("#searchCity");
 var searchInit = document.querySelector("#submitSearch");
 var clearSearch = document.querySelector("#clearSearch");
@@ -37,7 +37,6 @@ function fetchCoords (search) {
       if (!data[0]) {
         alert('Location not found');
       } else {
-        console.log(data[0]);
         var cityData = data[0];
         var cityName = cityData.name;
         var lat = cityData.lat;
@@ -116,24 +115,22 @@ function renderCurrentWeather(cityName, cityCountry, weather, timezone) {
 }
 
 function saveHistory (search) {
-  if (searchHistory.indexOf(search) !== -1) {
+  if (storedHistory.indexOf(search) !== -1) {
     return;
   }
-  searchHistory.push(search);
-  localStorage.setItem('search-history', JSON.stringify(searchHistory));
+  storedHistory.push(search);
+  localStorage.setItem('search-history', JSON.stringify(storedHistory));
   renderSearchHistory();
 }
 
 function renderSearchHistory() {
   searchHistoryEl.innerHTML = '';
-  for (var i = searchHistory.length -1; i>= 0; i--) {
+  for (var i = storedHistory.length -1; i>= 0; i--) {
     var buttonItem = document.createElement('button');
     buttonItem.setAttribute('type','button');
-    // buttonItem.setAttribute('aria-controls', 'today-forecast');
-    // buttonItem.classList.add('history-btn', 'btn-history');
     buttonItem.setAttribute('class', 'btn btn-outline-info btn-block btn-history');
-    buttonItem.setAttribute('data-search', searchHistory[i]);
-    buttonItem.textContent = searchHistory[i];
+    buttonItem.setAttribute('data-search', storedHistory[i]);
+    buttonItem.textContent = storedHistory[i];
     searchHistoryEl.append(buttonItem);
   }
 }
@@ -141,7 +138,7 @@ function renderSearchHistory() {
 function getSearchHistory() {
   var storedHistory = localStorage.getItem('search-history');
   if (storedHistory) {
-    searchHistory = JSON.parse(storedHistory);
+    storedHistory = JSON.parse(storedHistory);
   }
   renderSearchHistory();
 }
@@ -215,7 +212,7 @@ function searchPrevious(event) {
 
 function clearSearchHistory(event) {
   event.preventDefault();
-  var storedHistory = localStorage.getItem('search-history');
+  storedHistory = localStorage.getItem('search-history');
   storedHistory = [];
   localStorage.setItem('search-history', JSON.stringify(storedHistory));
   searchHistoryEl.innerHTML="";
@@ -223,6 +220,7 @@ function clearSearchHistory(event) {
   forecastWeatherEl.innerHTML="";
   return;
 }
+
 getSearchHistory();
 searchInit.addEventListener('click', searchCity);
 searchHistoryEl.addEventListener('click', searchPrevious);
