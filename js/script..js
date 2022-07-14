@@ -1,5 +1,5 @@
 //API Key/Weather URL
-var weatherApiUrl = 'http://api.openweathermap.org';
+var weatherApiUrl = 'https://api.openweathermap.org';
 var weatherApiKey = 'ec3ce11c57dd96988278b8f33d0f356b';
 
 var storedHistory = [];
