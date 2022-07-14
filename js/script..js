@@ -66,11 +66,13 @@ function fetchWeather (cityName, cityCountry, lat, lon) {
     });
 }
 
+//Calls Current Weather and Five-Day Forecast Weather functions
 function renderItems(cityName, cityCountry, data) {
     renderCurrentWeather(cityName, cityCountry, data.current, data.timezone);
     renderForecast(data.daily, data.timezone);
 }
 
+//Creates current weather card
 function renderCurrentWeather(cityName, cityCountry, weather, timezone) {
     var date = dayjs().tz(timezone).format('MM/DD/YYYY');
     // Store response data from our fetch request in variables
@@ -89,6 +91,7 @@ function renderCurrentWeather(cityName, cityCountry, weather, timezone) {
     var uvIndexEl = document.createElement('p');
     var uvBadge = document.createElement('button');
 
+    //Creates weather icons and UV index badge
     weatherIcon.setAttribute('src', iconUrl);
     weatherIcon.setAttribute('alt', iconDescription);
     weatherIcon.setAttribute('class', 'weather-img');
@@ -102,6 +105,7 @@ function renderCurrentWeather(cityName, cityCountry, weather, timezone) {
       uvBadge.classList.add('btn-danger');
     }
     
+    //Creates card content
     cityNameEl.textContent = `Current Weather for ${cityName}, ${cityCountry} (${date})`;
     tempEl.textContent = `Temperature: ${temp}°F`;
     windEl.textContent = `Wind: ${wind} MPH`;
@@ -110,10 +114,12 @@ function renderCurrentWeather(cityName, cityCountry, weather, timezone) {
     uvBadge.textContent = uvIndex;
     uvIndexEl.append(uvBadge);
 
+    //Append information to page
     currentWeather.innerHTML = "";
     currentWeather.append(cityNameEl, weatherIcon, tempEl, windEl, humidityEl, uvIndexEl);
 }
 
+//Saves searched city to stored history in local storage
 function saveHistory (search) {
   if (storedHistory.indexOf(search) !== -1) {
     return;
@@ -123,6 +129,7 @@ function saveHistory (search) {
   renderSearchHistory();
 }
 
+//Creates buttons for each recently searched city
 function renderSearchHistory() {
   searchHistoryEl.innerHTML = '';
   for (var i = storedHistory.length -1; i>= 0; i--) {
@@ -135,6 +142,7 @@ function renderSearchHistory() {
   }
 }
 
+//Retrieves recently searched cities from local storage
 function getSearchHistory() {
   var storedHistory = localStorage.getItem('search-history');
   if (storedHistory) {
@@ -143,6 +151,7 @@ function getSearchHistory() {
   renderSearchHistory();
 }
 
+//Get five day forecast
 function renderForecast(forecast, timezone) {
   var startDate = dayjs().tz(timezone).add(1, 'day').startOf('day').unix();
   var endDate = dayjs().tz(timezone).add(6, 'day').startOf('day').unix();
@@ -160,6 +169,7 @@ function renderForecast(forecast, timezone) {
   }
 }
 
+//Create forecast cards for each day
 function renderForecastCard(forecast, timezone) {
   var date = forecast.dt;
   var iconUrl = `https://openweathermap.org/img/w/${forecast.weather[0].icon}.png`;
@@ -201,6 +211,7 @@ function renderForecastCard(forecast, timezone) {
 
 }
 
+//Recalls and displays weather data for recently searched cities
 function searchPrevious(event) {
   if (!event.target.matches('.btn-history')) {
     return;
@@ -210,6 +221,7 @@ function searchPrevious(event) {
   fetchCoords(search);
 }
 
+//Clears recently searched cities
 function clearSearchHistory(event) {
   event.preventDefault();
   storedHistory = localStorage.getItem('search-history');
@@ -221,7 +233,9 @@ function clearSearchHistory(event) {
   return;
 }
 
+
 getSearchHistory();
+
 searchInit.addEventListener('click', searchCity);
 searchHistoryEl.addEventListener('click', searchPrevious);
 clearSearch.addEventListener('click', clearSearchHistory);
